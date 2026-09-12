@@ -1,0 +1,6 @@
+# Lab 1 Reflection: Database Systems and DBA Responsibilities
+
+
+Installing and configuring a local MySQL server clearly demonstrates the advantages of the modern database approach compared to traditional file-based storage systems. In a file-based environment, data is fragmented across separate files, leading to uncontrolled data redundancy, inconsistencies, and conflicts during concurrent modifications. In contrast, MySQL provides a centralized database management system (DBMS) engine that guarantees data integrity, prevents duplicate records through structural constraints, and safely manages concurrent multi-user transactions.
+
+Once this database begins managing actual student records, the first critical Database Administrator (DBA) responsibility is Database Security and Access Management. Because educational systems handle sensitive Personally Identifiable Information (PII) and academic records, the DBA must configure role-based access control, enforce least-privilege user privileges, and eliminate general reliance on the root administrative account. This responsibility directly complements the centralized architecture of the DBMS: while the database allows efficient multi-user access across the university, the DBA ensures that this open accessibility never compromises student data privacy, authorization policies, or system security.
