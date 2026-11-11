@@ -1,0 +1,7 @@
+storage_location(<u>location_code</u>, description)
+member(<u>member_id</u>, member_name, phone, join_date)
+tool(<u>tool_id</u>, tool_name, category, purchase_date, location_code [FK])
+certification(<u>cert_id</u>, cert_name)
+tool_requirement(<u>tool_id [FK]</u>, <u>cert_id [FK]</u>)
+member_certification(<u>member_id [FK]</u>, <u>cert_id [FK]</u>, completion_date)
+borrowing(<u>borrow_id</u>, member_id [FK], tool_id [FK], borrow_date, return_date)

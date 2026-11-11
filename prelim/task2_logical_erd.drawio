@@ -1,0 +1,61 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="LogicalERD" name="Task 2 Logical ERD">
+    <mxGraphModel dx="1300" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="member" value="member" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="210" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="PK  member_id" style="text;spacingLeft=8;fontStyle=5;whiteSpace=wrap;html=1;" vertex="1" parent="member"><mxGeometry y="28" width="210" height="28" as="geometry" /></mxCell>
+        <mxCell id="m2" value="      member_name" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="member"><mxGeometry y="56" width="210" height="28" as="geometry" /></mxCell>
+        <mxCell id="m3" value="      phone" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="member"><mxGeometry y="84" width="210" height="28" as="geometry" /></mxCell>
+        <mxCell id="m4" value="      join_date" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="member"><mxGeometry y="112" width="210" height="28" as="geometry" /></mxCell>
+        <mxCell id="borrowing" value="borrowing" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="65" width="220" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="b1" value="PK  borrow_id" style="text;spacingLeft=8;fontStyle=5;whiteSpace=wrap;html=1;" vertex="1" parent="borrowing"><mxGeometry y="28" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="b2" value="FK  member_id" style="text;spacingLeft=8;fontStyle=2;whiteSpace=wrap;html=1;" vertex="1" parent="borrowing"><mxGeometry y="56" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="b3" value="FK  tool_id" style="text;spacingLeft=8;fontStyle=2;whiteSpace=wrap;html=1;" vertex="1" parent="borrowing"><mxGeometry y="84" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="b4" value="      borrow_date" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="borrowing"><mxGeometry y="112" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="b5" value="      return_date" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="borrowing"><mxGeometry y="140" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="tool" value="tool" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="65" width="220" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="t1" value="PK  tool_id" style="text;spacingLeft=8;fontStyle=5;whiteSpace=wrap;html=1;" vertex="1" parent="tool"><mxGeometry y="28" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="t2" value="      tool_name" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="tool"><mxGeometry y="56" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="t3" value="      category" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="tool"><mxGeometry y="84" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="t4" value="      purchase_date" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="tool"><mxGeometry y="112" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="t5" value="FK  location_code" style="text;spacingLeft=8;fontStyle=2;whiteSpace=wrap;html=1;" vertex="1" parent="tool"><mxGeometry y="140" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="mc" value="member_certification" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="340" width="220" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="mc1" value="PK, FK  member_id" style="text;spacingLeft=8;fontStyle=7;whiteSpace=wrap;html=1;" vertex="1" parent="mc"><mxGeometry y="28" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="mc2" value="PK, FK  cert_id" style="text;spacingLeft=8;fontStyle=7;whiteSpace=wrap;html=1;" vertex="1" parent="mc"><mxGeometry y="56" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="mc3" value="            completion_date" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="mc"><mxGeometry y="84" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="cert" value="certification" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="520" width="220" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="c1" value="PK  cert_id" style="text;spacingLeft=8;fontStyle=5;whiteSpace=wrap;html=1;" vertex="1" parent="cert"><mxGeometry y="28" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="c2" value="      cert_name" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="cert"><mxGeometry y="56" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="tr" value="tool_requirement" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="340" width="220" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="tr1" value="PK, FK  tool_id" style="text;spacingLeft=8;fontStyle=7;whiteSpace=wrap;html=1;" vertex="1" parent="tr"><mxGeometry y="28" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="tr2" value="PK, FK  cert_id" style="text;spacingLeft=8;fontStyle=7;whiteSpace=wrap;html=1;" vertex="1" parent="tr"><mxGeometry y="56" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="loc" value="storage_location" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="340" width="220" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" value="PK  location_code" style="text;spacingLeft=8;fontStyle=5;whiteSpace=wrap;html=1;" vertex="1" parent="loc"><mxGeometry y="28" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="l2" value="      description" style="text;spacingLeft=8;whiteSpace=wrap;html=1;" vertex="1" parent="loc"><mxGeometry y="56" width="220" height="28" as="geometry" /></mxCell>
+        <mxCell id="e1" value="initiates" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;startArrow=ERmandOne;endArrow=ERzeroToMany;endFill=0;" edge="1" parent="1" source="member" target="borrowing"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="is loaned in" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;startArrow=ERmandOne;endArrow=ERzeroToMany;endFill=0;" edge="1" parent="1" source="tool" target="borrowing"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" value="earns" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;startArrow=ERmandOne;endArrow=ERzeroToMany;endFill=0;" edge="1" parent="1" source="member" target="mc"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" value="is earned via" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0;exitY=0.5;entryX=0.5;entryY=1;startArrow=ERmandOne;endArrow=ERzeroToMany;endFill=0;" edge="1" parent="1" source="cert" target="mc"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" value="has requirement" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.25;exitY=1;entryX=0.5;entryY=0;startArrow=ERmandOne;endArrow=ERzeroToMany;endFill=0;" edge="1" parent="1" source="tool" target="tr"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" value="is required by" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=1;exitY=0.5;entryX=0.5;entryY=1;startArrow=ERmandOne;endArrow=ERzeroToMany;endFill=0;" edge="1" parent="1" source="cert" target="tr"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" value="holds" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;entryX=0.75;entryY=1;startArrow=ERmandOne;endArrow=ERzeroToMany;endFill=0;" edge="1" parent="1" source="loc" target="tool"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
