@@ -80,25 +80,41 @@ If you do not assign an alias to your column, MySQL will take the entire formula
 ## Task 4 — Comprehensive Data Audit
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+I selected the columns I wanted to display (`course_code`, `course_name`, `credits`) from the table `courses` whilst adding parentheses around `IS NULL` and `BETWEEN 4 AND 6`. This causes MySQL to check the `OR` before the `AND course_code LIKE '%ADV%'`. Finally, I ordered it in alphabetical order using the column `course_name`.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL here
+SELECT course_code, course_name, credits
+FROM courses
+WHERE (course_description IS NULL OR credits BETWEEN 4 AND 6)
+  AND course_code LIKE '%ADV%'
+ORDER BY course_name ASC;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task4_output.png`, or paste console/query output here.]_
+```text
++-------------+----------------------------+---------+
+| course_code | course_name                | credits |
++-------------+----------------------------+---------+
+| CS-ADV305   | Advanced Algorithms        |       4 |
+| CS-ADV400   | Advanced Capstone Project  |       6 |
+| CS-ADV101   | Advanced Database Systems  |       5 |
+| IT-ADV210   | Advanced Networking        |       3 |
+| ENG-ADV110  | Advanced Technical Writing |       2 |
+| IT-ADV150   | Advanced Web Development   |       6 |
++-------------+----------------------------+---------+
+```
+Precedence explanation: `AND` runs before `OR` by default, so I wrapped `(course_description IS NULL OR credits BETWEEN 4 AND 6)` in parentheses to make MySQL evaluate the `OR` conditions first before filtering with `AND course_code LIKE '%ADV%'`.
 
 **Reflection question:**
 Explain how MySQL evaluates the expression `A OR B AND C`. How did you use parentheses (if you did) to ensure your query filtered the exact data requested in the instructions?
-_[Your answer here]_
+The `AND` always comes first as it has higher precedence. This means that `A OR B AND C` will be interpreted as `A OR (B AND C)`. Putting parentheses around `IS NULL` and `BETWEEN` ensures that the `OR` condition is checked first by MySQL. Without parentheses any course with a null description would have shown up regardless of there being no `'ADV'` in the code.
 
 ---
 
 ## Self-Check
 
-- [ ] All tasks committed with individual, meaningful commit messages
-- [ ] All files placed inside `week07/`
-- [ ] This file completed and renamed `answers.md`
-- [ ] Repository link pasted into Moodle (no files uploaded)
+- [x] All tasks committed with individual, meaningful commit messages
+- [x] All files placed inside `week07/`
+- [x] This file completed and renamed `answers.md`
+- [x] Repository link pasted into Moodle (no files uploaded)
