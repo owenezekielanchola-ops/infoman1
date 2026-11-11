@@ -58,19 +58,22 @@ Using `CONCAT` in SQL will require extra CPU usage by the server. If there are t
 ## Task 3 — Project Deadline Analysis
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+I have calculated the number of days per assignment by using `DATEDIFF(due_date, assigned_date)`, creating a column called `Days_To_Complete`. The `WHERE` statement is filtering out assignments to only show ones that are longer than 14 days. Finally I have ordered my results in descending order using `ORDER BY Days_To_Complete DESC`.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL here
+SELECT assignment_name, DATEDIFF(due_date, assigned_date) AS Days_To_Complete
+FROM assignments
+WHERE DATEDIFF(due_date, assigned_date) > 14
+ORDER BY Days_To_Complete DESC;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task3_output.png`, or paste console/query output here.]_
+`task3_output.png`
 
 **Reflection question:**
 Why is column aliasing particularly important when using mathematical or date functions in the `SELECT` clause?
-_[Your answer here]_
+If you do not assign an alias to your column, MySQL will take the entire formula from `DATEDIFF(...)` as the column name. This can look untidy and cause issues when trying to use it in an `ORDER BY` statement or in application code. By assigning an alias it becomes clean and easy to understand.
 
 ---
 
