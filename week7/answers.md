@@ -19,27 +19,39 @@ WHERE major IN ('Computer Science', 'Information Technology')
 `task1_output.png`
 
 **Reflection question:**
-Why would it often be better to use the `IN` operator over several `OR` operators? It is much cleaner and more readable using `IN`. Using a long string of `OR` can get confusing and messy. It is easy to make a typo with having to type out the column name repeatedly.
-
+Why is it often better to use the `IN` operator rather than chaining multiple `OR` conditions when filtering by a specific list of values?
+It is much cleaner and more readable using `IN`. Using a long string of `OR` can get confusing and messy. It is easy to make a typo with having to type out the column name repeatedly.
 
 ---
 
 ## Task 2 — Formatting Employee Data
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+I used `LEFT(first_name, 1)` to get the first letter, `ROUND(salary)` to round salary. Then I put them into `CONCAT` alongside the punctuation required to match the example output. The column was then given an alias of `Instructor Details` and `LIMIT 5` was used to only display 5 rows.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL here
+SELECT CONCAT(LEFT(first_name, 1), '. ', last_name, ' ($', ROUND(salary), ')') AS `Instructor Details`
+FROM instructors
+LIMIT 5;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task2_output.png`, or paste console/query output here.]_
+```text
++---------------------+
+| Instructor Details  |
++---------------------+
+| J. Smith ($55001)   |
+| M. Santos ($62500)  |
+| R. Johnson ($49000) |
+| A. Reyes ($71250)   |
+| P. Cruz ($47001)    |
++---------------------+
+```
 
 **Reflection question:**
 How do string functions like `CONCAT` affect the performance of a query compared to retrieving raw columns and formatting them in the application layer (e.g., in Java or Python)?
-_[Your answer here]_
+Using `CONCAT` in SQL will require extra CPU usage by the server. If there are thousands of rows it is usually better to simply get the raw data and format it in Python/Java. However in this case there is not much of a difference.
 
 ---
 
