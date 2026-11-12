@@ -59,3 +59,28 @@ The calculator (product_id = 6) successfully updated its price from 850.00 to 87
 **Reflection question:**
 _[What would your UPDATE and DELETE have done without their WHERE clauses, and why is a stable identifier safer than a name?]_
 Without the WHERE clause it would have updated all prices and deleted all rows. Using a primary key such as product_id is safer as the IDs are unique and you will not accidentally have duplicate names.
+
+## Task 3 — Self Join & Cross Join
+
+**Approach / explanation:**
+(a) Used a self join on the employees table with two aliases (e & m). Used a LEFT JOIN to join e.manager_id to m.employee_id. (b) Used a CROSS JOIN to join the colours and sizes tables.
+
+**Code / query used (if applicable):**
+```sql
+SELECT e.employee_name AS employee, m.employee_name AS manager
+FROM employees AS e
+LEFT JOIN employees AS m ON e.manager_id = m.employee_id;
+
+SELECT c.color_name, s.size_name
+FROM colors c
+CROSS JOIN sizes s;
+```
+
+**Evidence (screenshot filename, output, or file reference in this folder):**
+`task3_output.txt`
+
+The query (a) returned 3 rows. Lea Ramos was still present with a NULL value as we used a LEFT JOIN. The query (b) returned 9 rows. This is intended as it can create variations of colour & size for notebooks. This should never happen by accident as there is no ON clause.
+
+**Reflection question:**
+_[Why does the self join need two aliases and a LEFT JOIN, and when is a CROSS JOIN the deliberate choice rather than a missing ON?]_
+Two aliases were needed as MySQL would not know which row was the employee and which was the manager. The LEFT JOIN included Lea as she does not have a manager. The CROSS JOIN is intentional when you want all possible combinations such as creating a catalogue of sizes and colours.

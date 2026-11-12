@@ -20,3 +20,11 @@ SELECT product_id, product_name, price FROM products WHERE product_id = 6;
 SELECT product_id, product_name, sku FROM products WHERE product_id = 5;
 DELETE FROM products WHERE product_id = 5;
 SELECT product_id, product_name, sku FROM products WHERE product_id = 5;
+
+SELECT e.employee_name AS employee, m.employee_name AS manager
+FROM employees AS e
+LEFT JOIN employees AS m ON e.manager_id = m.employee_id;
+
+SELECT c.color_name, s.size_name
+FROM colors c
+CROSS JOIN sizes s;
