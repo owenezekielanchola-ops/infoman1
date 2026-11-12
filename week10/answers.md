@@ -34,3 +34,28 @@ The first two inserts executed successfully and appeared in the SELECT statement
 **Reflection question:**
 _[Why does listing target columns explicitly make an INSERT safer, and what fills in for columns you omit?]_
 When you explicitly state the columns you will be inserting into, it ensures it will not fail if columns are moved around, or more are added. Columns not specified will take on their default value, auto increment value or NULL if allowed.
+
+## Task 2 — UPDATE & DELETE Without Collateral Damage
+
+**Approach / explanation:**
+I used the product ID to look at the row before updating/deleting. Then used the same WHERE clause to update/delete. Finally, a SELECT statement to ensure it is updated/deleted.
+
+**Code / query used (if applicable):**
+```sql
+SELECT product_id, product_name, price FROM products WHERE product_id = 6;
+UPDATE products SET price = 875.00 WHERE product_id = 6;
+SELECT product_id, product_name, price FROM products WHERE product_id = 6;
+
+SELECT product_id, product_name, sku FROM products WHERE product_id = 5;
+DELETE FROM products WHERE product_id = 5;
+SELECT product_id, product_name, sku FROM products WHERE product_id = 5;
+```
+
+**Evidence (screenshot filename, output, or file reference in this folder):**
+`task2_output.txt`
+
+The calculator (product_id = 6) successfully updated its price from 850.00 to 875.00. The eraser (product_id = 5) successfully deleted and verified with an empty set. If there was no WHERE clause, it would have updated all products to 875.00 and attempted to delete all rows.
+
+**Reflection question:**
+_[What would your UPDATE and DELETE have done without their WHERE clauses, and why is a stable identifier safer than a name?]_
+Without the WHERE clause it would have updated all prices and deleted all rows. Using a primary key such as product_id is safer as the IDs are unique and you will not accidentally have duplicate names.

@@ -12,3 +12,11 @@ SELECT * FROM products WHERE sku = 'CMP-001';
 
 INSERT INTO products (product_name, sku, price, stock_quantity, status)
 VALUES ('Marker', 'MK-001', 'free', 10, 'Active');
+
+SELECT product_id, product_name, price FROM products WHERE product_id = 6;
+UPDATE products SET price = 875.00 WHERE product_id = 6;
+SELECT product_id, product_name, price FROM products WHERE product_id = 6;
+
+SELECT product_id, product_name, sku FROM products WHERE product_id = 5;
+DELETE FROM products WHERE product_id = 5;
+SELECT product_id, product_name, sku FROM products WHERE product_id = 5;
