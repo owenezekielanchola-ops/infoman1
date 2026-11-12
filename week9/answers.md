@@ -50,3 +50,25 @@ WHERE o.order_id IS NULL;
 **Reflection question:**
 _[What does NULL mean in the unmatched columns of a LEFT JOIN, and why must you test it with IS NULL instead of equals?]_
 It means there isn't a matching order. We can't use = NULL as it will return unknown rather than true. So therefore we use IS NULL.
+
+## Task 3 — Four-Table Canteen Report
+
+**Approach / explanation:**
+I joined all four tables with their own ON on `student_id`, `order_id` and `menu_id`. Every column has an alias in front, and `line_total` is `oi.quantity * mi.price`.
+
+**Code / query used (if applicable):**
+```sql
+SELECT s.student_name, s.program, o.order_id, mi.item_name, oi.quantity, mi.price, oi.quantity * mi.price AS line_total
+FROM students s
+INNER JOIN orders o ON s.student_id = o.student_id
+INNER JOIN order_items oi ON o.order_id = oi.order_id
+INNER JOIN menu_items mi ON oi.menu_id = mi.menu_id
+ORDER BY o.order_id, mi.item_name;
+```
+
+**Evidence (screenshot filename, output, or file reference in this folder):**
+`task3_output.txt` (4 rows)
+
+**Reflection question:**
+_[Why does each JOIN in a multi-table chain need its own ON condition, and what goes wrong when two joins share one?]_
+We have to have individual ON clauses for each table so they can be joined using their key. If 2 tables shared the same ON clause, the table wouldn't be joined properly, causing duplicates and incorrect totals.
