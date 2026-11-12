@@ -121,3 +121,29 @@ The valid inserts all went through. However, the invalid inserts failed due to t
 **Reflection question:**
 _[Why do constraints block future bad writes without repairing old bad rows, and what must you do before adding NOT NULL?]_
 Constraints only check new inserts and will not automatically update old rows. Before adding NOT NULL you must search for any NULL values and either update or delete them.
+
+## Task 5 — Reflection
+
+**Approach / explanation:**
+Compare application rules to database constraints used in previous tasks. Mention the error I made in task 3.
+
+**Code / query used (if applicable):**
+```sql
+-- paste your SQL (or Java/JDBC, for Week 13+) here
+```
+
+**Evidence (screenshot filename, output, or file reference in this folder):**
+Application rules would be used for things like friendly validation on forms, such as checking text formatting before the user clicks submit. However, for rules to protect the data itself, I would always use constraints on the database. As anyone can bypass a form with a different script or SQL. In task 4 we added UNIQUE to sku and CHECK (price > 0) to the products table. Even if the web form for a book store broke, or a direct insert was used, MySQL would still not allow duplicates for SKU and 0 prices.
+
+An error I noticed in task 3 was not using separate aliases for the self join. Initially I tried to do a self join on the employees table without using separate aliases and MySQL gave an error stating the table/column was not unique and was ambiguous. I fixed this by adding aliases to each table (e & m) and adding e. or m. to all columns in the SELECT and ON clauses.
+
+**Reflection question:**
+_[When would you trust the application form versus the database constraint to enforce a rule, and what single symptom would tell you the wrong layer was trusted?]_
+Trust the application form for UX and formatting. Trust the constraints for data integrity. Bad data would appear in the table such as duplicate SKUs and 0 prices.
+
+## Self-Check
+
+- [x] All tasks committed with individual, meaningful commit messages
+- [x] All files placed inside `week10/`
+- [x] This file completed and renamed `answers.md`
+- [x] Repository link pasted into Moodle (no files uploaded)
