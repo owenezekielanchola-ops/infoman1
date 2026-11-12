@@ -79,7 +79,7 @@ CROSS JOIN sizes s;
 **Evidence (screenshot filename, output, or file reference in this folder):**
 `task3_output.txt`
 
-The query (a) returned 3 rows. Lea Ramos was still present with a NULL value as we used a LEFT JOIN. The query (b) returned 9 rows. This is intended as it can create variations of colour & size for notebooks. This should never happen by accident as there is no ON clause.
+The query (a) returned 3 rows. Lea Ramos was still present with a NULL value as we used a LEFT JOIN. The query (b) returned 9 rows. This is intended as it can create variations of colour & size for notebooks, whereas an accidental missing-ON would unintentionally multiply every row of one table by every row of the other into a huge, meaningless Cartesian product with inflated counts.
 
 **Reflection question:**
 _[Why does the self join need two aliases and a LEFT JOIN, and when is a CROSS JOIN the deliberate choice rather than a missing ON?]_
@@ -120,7 +120,7 @@ The valid inserts all went through. However, the invalid inserts failed due to t
 
 **Reflection question:**
 _[Why do constraints block future bad writes without repairing old bad rows, and what must you do before adding NOT NULL?]_
-Constraints only check new inserts and will not automatically update old rows. Before adding NOT NULL you must search for any NULL values and either update or delete them.
+Constraints only validate future writes (inserts and updates) and will not automatically repair old bad rows. Before adding NOT NULL you must search for any NULL values and either update or delete them.
 
 ## Task 5 — Reflection
 
