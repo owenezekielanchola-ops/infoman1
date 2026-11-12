@@ -84,3 +84,40 @@ The query (a) returned 3 rows. Lea Ramos was still present with a NULL value as 
 **Reflection question:**
 _[Why does the self join need two aliases and a LEFT JOIN, and when is a CROSS JOIN the deliberate choice rather than a missing ON?]_
 Two aliases were needed as MySQL would not know which row was the employee and which was the manager. The LEFT JOIN included Lea as she does not have a manager. The CROSS JOIN is intentional when you want all possible combinations such as creating a catalogue of sizes and colours.
+
+## Task 4 — Constraints & Table Evolution
+
+**Approach / explanation:**
+I added a contact_number column to the products table. I also added NOT NULL to product_name, UNIQUE to sku and CHECK (price > 0) using ALTER TABLE. For each rule I did a valid and invalid insert.
+
+**Code / query used (if applicable):**
+```sql
+ALTER TABLE products ADD COLUMN contact_number VARCHAR(20);
+
+ALTER TABLE products MODIFY COLUMN product_name VARCHAR(100) NOT NULL;
+INSERT INTO products (product_name, sku, price, stock_quantity, status)
+VALUES ('Highlighter', 'HL-001', 35.00, 40, 'Active');
+INSERT INTO products (product_name, sku, price, stock_quantity, status)
+VALUES (NULL, 'HL-002', 35.00, 40, 'Active');
+
+ALTER TABLE products ADD CONSTRAINT uq_products_sku UNIQUE (sku);
+INSERT INTO products (product_name, sku, price, stock_quantity, status)
+VALUES ('Folder', 'FD-001', 12.00, 60, 'Active');
+INSERT INTO products (product_name, sku, price, stock_quantity, status)
+VALUES ('Duplicate Notebook', 'NB-001', 45.00, 10, 'Active');
+
+ALTER TABLE products ADD CONSTRAINT chk_products_price CHECK (price > 0);
+INSERT INTO products (product_name, sku, price, stock_quantity, status)
+VALUES ('Correction Tape', 'CT-001', 28.00, 30, 'Active');
+INSERT INTO products (product_name, sku, price, stock_quantity, status)
+VALUES ('Free Pen', 'FP-001', 0.00, 10, 'Active');
+```
+
+**Evidence (screenshot filename, output, or file reference in this folder):**
+`task4_output.txt`
+
+The valid inserts all went through. However, the invalid inserts failed due to the product_name having a NULL value, sku having a duplicate NB-001 and price having a value of 0.00. As this is MySQL, to add NOT NULL you have to use MODIFY COLUMN and restate the VARCHAR(100). Older versions of MySQL do not allow the CHECK rule so I tested 0.00 to see if it was enforced on this server.
+
+**Reflection question:**
+_[Why do constraints block future bad writes without repairing old bad rows, and what must you do before adding NOT NULL?]_
+Constraints only check new inserts and will not automatically update old rows. Before adding NOT NULL you must search for any NULL values and either update or delete them.
