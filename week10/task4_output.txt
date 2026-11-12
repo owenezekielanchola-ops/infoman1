@@ -1,0 +1,38 @@
+mysql> ALTER TABLE products ADD COLUMN contact_number VARCHAR(20);
+Query OK, 0 rows affected (0.178 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE products MODIFY COLUMN product_name VARCHAR(100) NOT NULL;
+Query OK, 0 rows affected (0.514 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO products (product_name, sku, price, stock_quantity, status)
+    -> VALUES ('Highlighter', 'HL-001', 35.00, 40, 'Active');
+Query OK, 1 row affected (0.012 sec)
+
+mysql> INSERT INTO products (product_name, sku, price, stock_quantity, status)
+    -> VALUES (NULL, 'HL-002', 35.00, 40, 'Active');
+ERROR 1048 (23000): Column 'product_name' cannot be null
+mysql> ALTER TABLE products ADD CONSTRAINT uq_products_sku UNIQUE (sku);
+Query OK, 0 rows affected (0.346 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO products (product_name, sku, price, stock_quantity, status)
+    -> VALUES ('Folder', 'FD-001', 12.00, 60, 'Active');
+Query OK, 1 row affected (0.016 sec)
+
+mysql> INSERT INTO products (product_name, sku, price, stock_quantity, status)
+    -> VALUES ('Duplicate Notebook', 'NB-001', 45.00, 10, 'Active');
+ERROR 1062 (23000): Duplicate entry 'NB-001' for key 'products.uq_products_sku'
+mysql> ALTER TABLE products ADD CONSTRAINT chk_products_price CHECK (price > 0);
+Query OK, 8 rows affected (0.428 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO products (product_name, sku, price, stock_quantity, status)
+    -> VALUES ('Correction Tape', 'CT-001', 28.00, 30, 'Active');
+Query OK, 1 row affected (0.020 sec)
+
+mysql> INSERT INTO products (product_name, sku, price, stock_quantity, status)
+    -> VALUES ('Free Pen', 'FP-001', 0.00, 10, 'Active');
+ERROR 3819 (HY000): Check constraint 'chk_products_price' is violated.
+mysql> notee

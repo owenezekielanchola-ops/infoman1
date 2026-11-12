@@ -1,0 +1,31 @@
+mysql> SELECT e.employee_name AS employee, m.employee_name AS manager
+    -> FROM employees AS e
+    -> LEFT JOIN employees AS m ON e.manager_id = m.employee_id;
++-------------+-----------+
+| employee    | manager   |
++-------------+-----------+
+| Lea Ramos   | NULL      |
+| Carlo Reyes | Lea Ramos |
+| Dana Cruz   | Lea Ramos |
++-------------+-----------+
+3 rows in set (0.017 sec)
+
+mysql> SELECT c.color_name, s.size_name
+    -> FROM colors c
+    -> CROSS JOIN sizes s;
++------------+-----------+
+| color_name | size_name |
++------------+-----------+
+| Red        | L         |
+| Green      | L         |
+| Blue       | L         |
+| Red        | M         |
+| Green      | M         |
+| Blue       | M         |
+| Red        | S         |
+| Green      | S         |
+| Blue       | S         |
++------------+-----------+
+9 rows in set (0.020 sec)
+
+mysql> notee
