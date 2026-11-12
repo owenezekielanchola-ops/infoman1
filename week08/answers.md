@@ -1,16 +1,16 @@
 # INFOMAN1 — Week 8 Lab Answers
 
-Name: 
-Student ID: 
-GitHub repo: https://github.com/<STUDENT_GITHUB_USERNAME>/infoman1
-Date submitted: 
+Name: Owen Ezekiel A. Anchola
+Student ID: 2511003
+GitHub repo: https://github.com/owenezekielanchola-ops/infoman1
+Date submitted: 11/12/2026
 
 **Dataset check:** `SELECT COUNT(*) FROM employee;` returned: 500
 
 ## Task 1 — Pattern Matching Basics
 
 **Approach / explanation:**
-I used the `LIKE` operator with the `%` and `_` wildcards to filter the employee table by different text patterns. First, I ran `'%ez'` to grab last names ending in "ez" and `'Ma%'` for first names starting with "Ma". After that, I used four underscores in `'E____'` to prove all 500 employee codes have 5 characters, and then used `'E_0__'` to find codes where the third character is 0.
+I used the `LIKE` operator with the `%` and `_` wildcards to filter the employee table using different text patterns. First, I ran `'%ez'` to get last names ending with "ez" and `'Ma%'` to find first names starting with "Ma". Next, I used four underscores in `'E____'` to confirm that all 500 employee codes are 5 characters long, and then ran `'E_0__'` to find the codes with 0 as the third character.
 
 **Code / query used (if applicable):**
 ```sql
@@ -88,23 +88,58 @@ Full text copies of all four result sets are saved in `task1_output.txt`.
 
 **Reflection question:**
 _[Why do we use the `%` wildcard instead of the `_` wildcard when searching for fields containing a specific keyword?]_
-Why do we use the % wildcard rather than the _ wildcard? We use the % wildcard because it can look for any amount of characters including none. The _ wildcard can only look for one character at a time. You will not be able to use the _ wildcard unless you know the exact length of text.
+We use the `%` wildcard because it can look for any amount of characters, including none. The `_` wildcard can only look for one character at a time. You will not be able to use the `_` wildcard unless you know the exact length of text.
 
 ## Task 2 — Basic Aggregation
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+Using aggregate functions (`COUNT`, `SUM`, `AVG`, `MIN`, and `MAX`), I was able to analyze the employee table and hire date range. The employee table shows a large discrepancy (148 rows) between the values for `COUNT(*)` (500) and `COUNT(commission)` (352). This is because the `COUNT(*)` function displays the total number of rows in the table, whereas `COUNT(commission)` excludes any `NULL` values. In Query 2.4, it was necessary to use `COALESCE(commission, 0)` because if you add any number to a `NULL` value in SQL, it will give `NULL`. Therefore, if we did not change any `NULL` values to `0`, we would not have included those 148 employees' base salaries in the `SUM`.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL here
+SELECT COUNT(*) AS total_employees, COUNT(commission) AS employees_with_commission FROM employee;
+
+SELECT SUM(salary) AS total_monthly_payroll FROM employee;
+
+SELECT AVG(salary) AS avg_salary, MIN(hire_date) AS earliest_hire, MAX(hire_date) AS latest_hire FROM employee;
+
+SELECT SUM(salary + COALESCE(commission, 0)) AS total_compensation FROM employee;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task2_output.png`, or paste console/query output here.]_
+```text
++-----------------+---------------------------+
+| total_employees | employees_with_commission |
++-----------------+---------------------------+
+|             500 |                       352 |
++-----------------+---------------------------+
+1 row in set
+
++-----------------------+
+| total_monthly_payroll |
++-----------------------+
+|           33282250.00 |
++-----------------------+
+1 row in set
+
++--------------+---------------+-------------+
+| avg_salary   | earliest_hire | latest_hire |
++--------------+---------------+-------------+
+| 66564.500000 | 2015-01-03    | 2026-09-14  |
++--------------+---------------+-------------+
+1 row in set
+
++--------------------+
+| total_compensation |
++--------------------+
+|        35387750.00 |
++--------------------+
+1 row in set
+```
 
 **Reflection question:**
 _[What is the difference between `COUNT(*)` and `COUNT(column_name)`?]_
+The difference between the two is that `COUNT(*)` will count all of the rows in the result set, regardless of any `NULL` values in the columns. However, `COUNT(column_name)` will only count the number of rows where there is a non-`NULL` value in that particular column.
 
 ## Task 3 — Grouping Data
 
