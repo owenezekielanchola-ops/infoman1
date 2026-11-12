@@ -72,3 +72,36 @@ ORDER BY o.order_id, mi.item_name;
 **Reflection question:**
 _[Why does each JOIN in a multi-table chain need its own ON condition, and what goes wrong when two joins share one?]_
 We have to have individual ON clauses for each table so they can be joined using their key. If 2 tables shared the same ON clause, the table wouldn't be joined properly, causing duplicates and incorrect totals.
+
+## Task 4 — Aliases, Filters, and the Silent Inner Join
+
+**Approach / explanation:**
+Version 1 uses INNER JOINs with the date filter, sorted newest first. Version 2 starts with a LEFT JOIN from `students` to `orders` but uses the same WHERE.
+
+**Code / query used (if applicable):**
+```sql
+SELECT s.student_name AS buyer, mi.item_name, oi.quantity * mi.price AS line_total
+FROM students s
+INNER JOIN orders o ON s.student_id = o.student_id
+INNER JOIN order_items oi ON o.order_id = oi.order_id
+INNER JOIN menu_items mi ON oi.menu_id = mi.menu_id
+WHERE o.order_date >= '2026-08-01'
+ORDER BY o.order_date DESC;
+
+SELECT s.student_name AS buyer, mi.item_name, oi.quantity * mi.price AS line_total
+FROM students s
+LEFT JOIN orders o ON s.student_id = o.student_id
+LEFT JOIN order_items oi ON o.order_id = oi.order_id
+LEFT JOIN menu_items mi ON oi.menu_id = mi.menu_id
+WHERE o.order_date >= '2026-08-01'
+ORDER BY o.order_date DESC;
+```
+
+**Evidence (screenshot filename, output, or file reference in this folder):**
+`task4_output.txt`
+
+Both versions returned 4 rows. However, in version 2, as we are doing a LEFT JOIN from students, we should see 6 rows. The issue here is that Ben and Cara have been excluded. This is because their order_date is NULL, and therefore doesn't meet the requirements of >=. To fix this, we can put the date criteria in the ON clause (ON s.student_id = o.student_id AND o.order_date >= '2026-08-01'), or we can include OR o.order_id IS NULL.
+
+**Reflection question:**
+_[Why does adding WHERE on the right-side table remove the NULL rows a LEFT JOIN just preserved, and where should that rule live instead?]_
+The WHERE clause comes after the JOIN has occurred, so the NULL rows won't meet the criteria. Therefore, we need to include the criteria in the ON clause of the orders table.

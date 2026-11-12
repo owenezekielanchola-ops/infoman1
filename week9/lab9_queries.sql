@@ -20,3 +20,19 @@ INNER JOIN orders o ON s.student_id = o.student_id
 INNER JOIN order_items oi ON o.order_id = oi.order_id
 INNER JOIN menu_items mi ON oi.menu_id = mi.menu_id
 ORDER BY o.order_id, mi.item_name;
+
+SELECT s.student_name AS buyer, mi.item_name, oi.quantity * mi.price AS line_total
+FROM students s
+INNER JOIN orders o ON s.student_id = o.student_id
+INNER JOIN order_items oi ON o.order_id = oi.order_id
+INNER JOIN menu_items mi ON oi.menu_id = mi.menu_id
+WHERE o.order_date >= '2026-08-01'
+ORDER BY o.order_date DESC;
+
+SELECT s.student_name AS buyer, mi.item_name, oi.quantity * mi.price AS line_total
+FROM students s
+LEFT JOIN orders o ON s.student_id = o.student_id
+LEFT JOIN order_items oi ON o.order_id = oi.order_id
+LEFT JOIN menu_items mi ON oi.menu_id = mi.menu_id
+WHERE o.order_date >= '2026-08-01'
+ORDER BY o.order_date DESC;
