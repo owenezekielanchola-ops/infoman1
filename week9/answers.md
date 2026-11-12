@@ -105,3 +105,27 @@ Both versions returned 4 rows. However, in version 2, as we are doing a LEFT JOI
 **Reflection question:**
 _[Why does adding WHERE on the right-side table remove the NULL rows a LEFT JOIN just preserved, and where should that rule live instead?]_
 The WHERE clause comes after the JOIN has occurred, so the NULL rows won't meet the criteria. Therefore, we need to include the criteria in the ON clause of the orders table.
+
+## Task 5 — Reflection
+
+**Approach / explanation:**
+I compared my INNER and LEFT JOIN results and wrote about the mistake I hit in Task 4.
+
+**Code / query used (if applicable):**
+N/A
+
+**Evidence (screenshot filename, output, or file reference in this folder):**
+I would use an INNER JOIN for when we only want to see the matching rows from both tables. Whereas, I would use a LEFT JOIN if I want to see all the people from the primary table. For example, in Task 1, the INNER JOIN only showed Ana and Dan. This is okay as we only want to see people who have bought something for the sales report. However, in Task 2, I would need to use a LEFT JOIN so Ben and Cara will show.
+
+My mistake was in Task 4. In version 2 I was using a LEFT JOIN from students to orders. I then added a WHERE clause to filter the orders where the order_date was >= '2026-08-01'. This caused Ben and Cara to not show. I only got 4 rows, whereas I should have got 6. This was because their order_date was NULL and therefore didn't meet the criteria. I fixed this by putting the date criteria into the ON clause of the orders table.
+
+**Reflection question:**
+_[Which join would you choose for an "all students including non-buyers" roster versus a "completed sales only" report, and what single symptom would tell you that you picked the wrong one?]_
+I would use a LEFT JOIN to show all students and an INNER JOIN for the sales. If the students who haven't bought anything aren't showing, or there are NULL rows in the sales report, then I have chosen the wrong one.
+
+## Self-Check
+
+- [x] All tasks committed with individual, meaningful commit messages
+- [x] All files placed inside `week9/`
+- [x] This file completed and renamed `answers.md`
+- [x] Repository link pasted into Moodle (no files uploaded)
