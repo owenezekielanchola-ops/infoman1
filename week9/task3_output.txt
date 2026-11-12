@@ -1,0 +1,17 @@
+mysql> SELECT s.student_name, s.program, o.order_id, mi.item_name, oi.quantity, mi.price, oi.quantity * mi.price AS line_total
+    -> FROM students s
+    -> INNER JOIN orders o ON s.student_id = o.student_id
+    -> INNER JOIN order_items oi ON o.order_id = oi.order_id
+    -> INNER JOIN menu_items mi ON oi.menu_id = mi.menu_id
+    -> ORDER BY o.order_id, mi.item_name;
++--------------+---------+----------+--------------+----------+-------+------------+
+| student_name | program | order_id | item_name    | quantity | price | line_total |
++--------------+---------+----------+--------------+----------+-------+------------+
+| Ana Cruz     | BSIT    |      101 | Iced Tea     |        1 | 30.00 |      30.00 |
+| Ana Cruz     | BSIT    |      101 | Siomai Rice  |        2 | 65.00 |     130.00 |
+| Ana Cruz     | BSIT    |      102 | Burger Steak |        1 | 89.00 |      89.00 |
+| Dan Reyes    | BSIT    |      103 | Siomai Rice  |        1 | 65.00 |      65.00 |
++--------------+---------+----------+--------------+----------+-------+------------+
+4 rows in set (0.039 sec)
+
+mysql> notee

@@ -1,0 +1,28 @@
+mysql> SELECT s.student_name, s.program, o.order_id, o.order_date
+    -> FROM students s
+    -> LEFT JOIN orders o ON s.student_id = o.student_id;
++--------------+---------+----------+------------+
+| student_name | program | order_id | order_date |
++--------------+---------+----------+------------+
+| Ana Cruz     | BSIT    |      102 | 2026-08-15 |
+| Ana Cruz     | BSIT    |      101 | 2026-08-10 |
+| Ben Lim      | BSCS    |     NULL | NULL       |
+| Cara Yu      | BSIS    |     NULL | NULL       |
+| Dan Reyes    | BSIT    |      103 | 2026-08-16 |
++--------------+---------+----------+------------+
+5 rows in set (0.041 sec)
+
+mysql> 
+mysql> SELECT s.student_name, s.program, o.order_id, o.order_date
+    -> FROM students s
+    -> LEFT JOIN orders o ON s.student_id = o.student_id
+    -> WHERE o.order_id IS NULL;
++--------------+---------+----------+------------+
+| student_name | program | order_id | order_date |
++--------------+---------+----------+------------+
+| Ben Lim      | BSCS    |     NULL | NULL       |
+| Cara Yu      | BSIS    |     NULL | NULL       |
++--------------+---------+----------+------------+
+2 rows in set (0.016 sec)
+
+mysql> notee
