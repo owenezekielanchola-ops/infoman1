@@ -144,18 +144,53 @@ The difference between the two is that `COUNT(*)` will count all of the rows in 
 ## Task 3 — Grouping Data
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+I used `GROUP BY department` in my first query in conjunction with `COUNT(*)`, `AVG(salary)`, and `COUNT(DISTINCT job_title)` to show the number of employees, average pay, and unique roles in each department. My second query grouped by `department` and `job_title` together to show the exact number of people in each role.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL here
+SELECT department, COUNT(*) AS headcount, AVG(salary) AS avg_salary, COUNT(DISTINCT job_title) AS distinct_titles FROM employee GROUP BY department;
+
+SELECT department, job_title, COUNT(*) AS headcount FROM employee GROUP BY department, job_title;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task3_output.png`, or paste console/query output here.]_
+```text
++-------------+-----------+--------------+-----------------+
+| department  | headcount | avg_salary   | distinct_titles |
++-------------+-----------+--------------+-----------------+
+| Sales       |       144 | 71799.652778 |               3 |
+| Engineering |       125 | 75160.000000 |               3 |
+| HR          |        50 | 62610.000000 |               3 |
+| Finance     |        69 | 79513.043478 |               3 |
+| Support     |       112 | 44028.571429 |               3 |
++-------------+-----------+--------------+-----------------+
+5 rows in set
+
++-------------+----------------------+-----------+
+| department  | job_title            | headcount |
++-------------+----------------------+-----------+
+| Sales       | Sales Manager        |        49 |
+| Sales       | Account Manager      |        50 |
+| Engineering | QA Analyst           |        39 |
+| Sales       | Sales Representative |        45 |
+| Engineering | Software Engineer    |        44 |
+| Engineering | DevOps Engineer      |        42 |
+| HR          | HR Specialist        |        20 |
+| HR          | Recruiter            |        12 |
+| Finance     | Financial Analyst    |        24 |
+| Finance     | Finance Manager      |        24 |
+| Support     | Support Lead         |        29 |
+| HR          | HR Manager           |        18 |
+| Support     | Support Specialist   |        43 |
+| Finance     | Accountant           |        21 |
+| Support     | Support Agent        |        40 |
++-------------+----------------------+-----------+
+15 rows in set
+```
 
 **Reflection question:**
 _[Why is it generally invalid to include columns in the `SELECT` list that are not in the `GROUP BY` clause, unless they are inside an aggregate function?]_
+Using `GROUP BY` in your query will cause SQL to combine rows. If you include a column in your `SELECT` list that is not in the `GROUP BY` clause, then there are many different values in that column. As such, SQL will not know what value to display.
 
 ## Task 4 — Advanced Filtering with HAVING
 
