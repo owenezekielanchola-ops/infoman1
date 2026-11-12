@@ -28,6 +28,16 @@ SELECT borrow_date, return_date
 FROM borrowing
 WHERE member_id = 1;
 ```
+Result:
+```text
++-------------+-------------+
+| borrow_date | return_date |
++-------------+-------------+
+| 2025-09-01  | 2025-09-10  |
+| 2025-09-12  | NULL        |
++-------------+-------------+
+2 rows in set
+```
 
 ### 3. Week 5 Concept Illustrated
 This demonstrates column scoping when using a single-table SELECT ... FROM ... WHERE statement. As a single-table SELECT statement can only filter based on columns within the table in the FROM section (borrowing) we need to find out what member_id values are present in member first. The tables are distinct and joined using the Primary Key - Foreign Key (member_id).
