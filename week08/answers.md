@@ -27,7 +27,7 @@ SELECT emp_code, first_name, last_name FROM employee WHERE emp_code LIKE 'E_0__'
 Full text copies of all four result sets are saved in `task1_output.txt`.
 
 - **Query 1.1 (`LIKE '%ez'`):** Returned **161 rows**.
-- **Query 1.2 (`LIKE 'Ma%'`):** Returned **111 rows**.
+- **Query 1.2 (`LIKE 'Ma%'`):** Returned **112 rows**.
 - **Query 1.3a (`LIKE 'E____'`):** Returned **500 rows** (confirms all 500 codes are 5 characters starting with `E`).
 - **Query 1.3b (`LIKE 'E_0__'`):** Returned **48 rows**:
 ```text
@@ -195,22 +195,44 @@ Using `GROUP BY` in your query will cause SQL to combine rows. If you include a 
 ## Task 4 — Advanced Filtering with HAVING
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+In Query 4.1, I chose to use a threshold of `70000`. I looked at the averages from Task 3.1 and saw that the average salary across the company was `$66,564.50`. I chose a round number of `$70,000` as this is above the average and will separate the higher-paying departments (Finance, Engineering, and Sales) from HR and Support. I needed to use `HAVING` in Query 4.1 because `AVG(salary)` is an aggregate function, and `WHERE` cannot be used with an aggregate function. In Query 4.2, I used `WHERE status = 'Active'` to filter the rows. I needed to use `HAVING` for `COUNT(*) > 50` as this is an aggregate function, and the number of active people in each department can only be found once the rows have been grouped by department.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL here
+SELECT department, AVG(salary) AS avg_salary FROM employee GROUP BY department HAVING AVG(salary) > 70000;
+
+SELECT department, COUNT(*) AS active_headcount FROM employee WHERE status = 'Active' GROUP BY department HAVING COUNT(*) > 50;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task4_output.png`, or paste console/query output here.]_
+```text
++-------------+--------------+
+| department  | avg_salary   |
++-------------+--------------+
+| Sales       | 71799.652778 |
+| Engineering | 75160.000000 |
+| Finance     | 79513.043478 |
++-------------+--------------+
+3 rows in set
+
++-------------+------------------+
+| department  | active_headcount |
++-------------+------------------+
+| Sales       |              116 |
+| Engineering |              104 |
+| Finance     |               52 |
+| Support     |               99 |
++-------------+------------------+
+4 rows in set
+```
 
 **Reflection question:**
 _[Why must we use the `HAVING` clause here instead of the `WHERE` clause to filter by the average value?]_
+We must use `HAVING` as `WHERE` will filter our individual rows before using `GROUP BY`. This means that the average has not yet been calculated. `HAVING` is used after the groups have been created so we can filter our data based on the `AVG(salary)`.
 
 ## Self-Check
 
-- [ ] All tasks committed with individual, meaningful commit messages
-- [ ] All files placed inside `week08/`
-- [ ] This file completed and renamed `answers.md`
-- [ ] Repository link pasted into Moodle (no files uploaded)
+- [x] All tasks committed with individual, meaningful commit messages
+- [x] All files placed inside `week08/`
+- [x] This file completed and renamed `answers.md`
+- [x] Repository link pasted into Moodle (no files uploaded)
