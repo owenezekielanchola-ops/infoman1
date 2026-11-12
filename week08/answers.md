@@ -16,7 +16,7 @@ I used the `LIKE` operator with the `%` and `_` wildcards to filter the employee
 ```sql
 SELECT emp_id, first_name, last_name FROM employee WHERE last_name LIKE '%ez';
 
-SELECT emp_id, first_name, department FROM employee WHERE last_name LIKE 'Ma%';
+SELECT emp_id, first_name, department FROM employee WHERE first_name LIKE 'Ma%';
 
 SELECT emp_id, emp_code, first_name, last_name FROM employee WHERE emp_code LIKE 'E____';
 
