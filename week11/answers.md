@@ -39,18 +39,37 @@ I was most shocked by the deletion issue as you lose an entire course by just de
 ## Task 2 — Reach First Normal Form
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+Create enrollment_1nf without enrolled_courses. Add the primary key (student_id, course_id). Insert 3 rows. Perform a SELECT.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL (or Java/JDBC, for Week 13+) here
+CREATE TABLE enrollment_1nf (
+  student_id INT NOT NULL,
+  student_name VARCHAR(100) NOT NULL,
+  course_id VARCHAR(10) NOT NULL,
+  course_title VARCHAR(100) NOT NULL,
+  dept_id VARCHAR(10) NOT NULL,
+  department_name VARCHAR(100) NOT NULL,
+  grade DECIMAL(4,2) NOT NULL,
+  PRIMARY KEY (student_id, course_id)
+);
+
+INSERT INTO enrollment_1nf VALUES
+(101, 'Ana Cruz', 'IT101', 'Database Systems', 'D01', 'Computing Studies', 1.50),
+(102, 'Ben Lim', 'IT101', 'Database Systems', 'D01', 'Computing Studies', 1.75),
+(101, 'Ana Cruz', 'IT102', 'Web Development', 'D01', 'Computing Studies', 1.25);
+
+SELECT * FROM enrollment_1nf;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task2_output.png`, or paste console/query output here.]_
+`task2_output.txt`
+
+All values in the table are now single values. There are 3 rows in the table with the primary key (student_id, course_id). There is still some redundant information in the 1NF table. Student name (Ana Cruz), Course Title (Database Systems), and Department ID (D01) and Name (Computing Studies) are all duplicated.
 
 **Reflection question:**
 _[Why does splitting the multi-valued cell still leave student names repeating, and which normal form removes that next?]_
+Each row represents one enrollment. However if a student has 2 courses they will still be duplicated. This will be resolved in 2NF by separating the columns that only partally depend on the key.
 
 ## Task 3 — Reach Second Normal Form
 
