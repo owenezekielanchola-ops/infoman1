@@ -59,3 +59,20 @@ SELECT s.student_id, s.student_name, c.course_id, c.course_title, c.dept_id, c.d
 FROM enrollments e
 INNER JOIN students s ON e.student_id = s.student_id
 INNER JOIN courses c ON e.course_id = c.course_id;
+
+CREATE TABLE departments (
+  dept_id VARCHAR(10) PRIMARY KEY,
+  department_name VARCHAR(100) NOT NULL
+);
+
+INSERT INTO departments SELECT DISTINCT dept_id, department_name FROM courses;
+
+ALTER TABLE courses
+DROP COLUMN department_name,
+ADD CONSTRAINT fk_courses_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id);
+
+SELECT s.student_name, c.course_title, d.department_name, e.grade
+FROM enrollments e
+INNER JOIN students s ON e.student_id = s.student_id
+INNER JOIN courses c ON e.course_id = c.course_id
+INNER JOIN departments d ON c.dept_id = d.dept_id;

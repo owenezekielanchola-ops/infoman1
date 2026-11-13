@@ -123,18 +123,41 @@ student_id alone will provide student_name (101 will always be Ana Cruz). Grade 
 ## Task 4 — Reach Third Normal Form
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+Created a departments table. Removed department_name from courses with a foreign key on dept_id. Checked all 4 tables. Performed a 4 way JOIN.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL (or Java/JDBC, for Week 13+) here
+CREATE TABLE departments (
+  dept_id VARCHAR(10) PRIMARY KEY,
+  department_name VARCHAR(100) NOT NULL
+);
+
+INSERT INTO departments SELECT DISTINCT dept_id, department_name FROM courses;
+
+ALTER TABLE courses
+DROP COLUMN department_name,
+ADD CONSTRAINT fk_courses_dept FOREIGN KEY (dept_id) REFERENCES departments(dept_id);
+
+SELECT s.student_name, c.course_title, d.department_name, e.grade
+FROM enrollments e
+INNER JOIN students s ON e.student_id = s.student_id
+INNER JOIN courses c ON e.course_id = c.course_id
+INNER JOIN departments d ON c.dept_id = d.dept_id;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task4_output.png`, or paste console/query output here.]_
+`task4_output.txt`
+
+Transitive Dependency: course_id → dept_id → department_name.
+Students: No Multi Valued, Partial or Transitive Dependencies. (3NF)
+Departments: No Multi Valued, Partial or Transitive Dependencies. (3NF)
+Courses: No Multi Valued, Partial or Transitive Dependencies. (3NF)
+Enrollments: No Multi Valued, Partial or Transitive Dependencies. (3NF)
+All 3 complete rows are returned.
 
 **Reflection question:**
 _[What makes the department name indirectly dependent, and how does the final four-table join prove nothing was lost?]_
+department_name now depends on dept_id rather than course_id. A 4 way JOIN was performed and all 3 original rows were returned showing no information was lost.
 
 ## Task 5 — Reflection
 
