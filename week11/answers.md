@@ -74,18 +74,51 @@ Each row represents one enrollment. However if a student has 2 courses they will
 ## Task 3 — Reach Second Normal Form
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+Listed the composite key. Showed dependencies. Split into 3 tables; students, courses (stage), enrollments. Joined the tables to recreate the report.
 
 **Code / query used (if applicable):**
 ```sql
--- paste your SQL (or Java/JDBC, for Week 13+) here
+CREATE TABLE students (
+  student_id INT PRIMARY KEY,
+  student_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE courses (
+  course_id VARCHAR(10) PRIMARY KEY,
+  course_title VARCHAR(100) NOT NULL,
+  dept_id VARCHAR(10) NOT NULL,
+  department_name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE enrollments (
+  student_id INT NOT NULL,
+  course_id VARCHAR(10) NOT NULL,
+  grade DECIMAL(4,2) NOT NULL,
+  PRIMARY KEY (student_id, course_id),
+  FOREIGN KEY (student_id) REFERENCES students(student_id),
+  FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+INSERT INTO students SELECT DISTINCT student_id, student_name FROM enrollment_1nf;
+INSERT INTO courses SELECT DISTINCT course_id, course_title, dept_id, department_name FROM enrollment_1nf;
+INSERT INTO enrollments SELECT student_id, course_id, grade FROM enrollment_1nf;
+
+SELECT s.student_id, s.student_name, c.course_id, c.course_title, c.dept_id, c.department_name, e.grade
+FROM enrollments e
+INNER JOIN students s ON e.student_id = s.student_id
+INNER JOIN courses c ON e.course_id = c.course_id;
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task3_output.png`, or paste console/query output here.]_
+`task3_output.txt`
+
+Composite Key: (student_id, course_id)
+Dependencies: student_id → student_name (Partial Dependency). course_id → course_title, dept_id, department_name (Partial Dependency). (student_id, course_id) → grade (Full Dependency).
+The grade remains as a full dependency as it refers to a particular student and course.
 
 **Reflection question:**
 _[How do you tell that student name depends on part of the key while grade depends on the whole key?]_
+student_id alone will provide student_name (101 will always be Ana Cruz). Grade requires both student_id and course_id. (101 has a grade of 1.50 in IT101 and 1.25 in IT102)
 
 ## Task 4 — Reach Third Normal Form
 
