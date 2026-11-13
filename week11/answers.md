@@ -162,7 +162,7 @@ department_name now depends on dept_id rather than course_id. A 4 way JOIN was p
 ## Task 5 — Reflection
 
 **Approach / explanation:**
-_[Write 2–4 sentences describing how you solved this task.]_
+I compared when to put a table into 3NF and when to intentionally leave it in a denormalised state. I also noted a mistake I made regarding foreign keys.
 
 **Code / query used (if applicable):**
 ```sql
@@ -170,14 +170,17 @@ _[Write 2–4 sentences describing how you solved this task.]_
 ```
 
 **Evidence (screenshot filename, output, or file reference in this folder):**
-_[e.g. `task5_reflection.txt`, or paste your 150–200 word reflection here.]_
+If this was a system for enrolling students on campus, I would put the table into 3NF. This is because students, courses, and departments will be added/updated regularly. In Task 1, the table wasn’t split so there was an update anomaly (changing department name D01 meant changing 3 rows) and delete anomaly (Ana’s IT102 row was deleted so course was deleted). By splitting the table into students, courses, departments and enrollments (Task 4), this removes the anomalies. I would intentionally leave the table in a denormalised state if it was a read only summary table. This is because I may want to keep student name in a snapshot of their old transcript so reports can be pulled quicker.
+
+A mistake I noticed was thinking foreign keys were causing redundancy. I originally thought that D01 was repeating so the table wasn’t in 3NF. This meant I felt I needed to remove dept_id from the courses. To fix this I referred back to the 3NF rule. Dept_id is a foreign key and needs to stay in the table so it can be joined. Only department_name needs to be moved.
 
 **Reflection question:**
 _[When would you keep some denormalized repetition on purpose, and what single symptom tells you a split dropped a key?]_
+If the table is intentionally left in a denormalised state, this should be done if it is a read only report or snapshot. This is because speed of reading data is a priority. If a split drops a key, the tables cannot be joined properly and will return missing rows or incorrect duplicates.
 
 ## Self-Check
 
-- [ ] All tasks committed with individual, meaningful commit messages
-- [ ] All files placed inside `week11/`
-- [ ] This file completed and renamed `answers.md`
-- [ ] Repository link pasted into Moodle (no files uploaded)
+- [x] All tasks committed with individual, meaningful commit messages
+- [x] All files placed inside `week11/`
+- [x] This file completed and renamed `answers.md`
+- [x] Repository link pasted into Moodle (no files uploaded)
