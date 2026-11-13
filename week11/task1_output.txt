@@ -1,0 +1,30 @@
+mysql> SELECT student_id, course_id, dept_id, department_name
+    -> FROM student_enrollment
+    -> WHERE dept_id = 'D01';
++------------+-----------+---------+-------------------+
+| student_id | course_id | dept_id | department_name   |
++------------+-----------+---------+-------------------+
+|        101 | IT101     | D01     | Computing Studies |
+|        102 | IT101     | D01     | Computing Studies |
+|        101 | IT102     | D01     | Computing Studies |
++------------+-----------+---------+-------------------+
+3 rows in set (0.034 sec)
+
+mysql> 
+mysql> SELECT *
+    -> FROM student_enrollment
+    -> WHERE course_id = 'IT103';
+Empty set (0.006 sec)
+
+mysql> 
+mysql> SELECT course_id, course_title, dept_id, department_name
+    -> FROM student_enrollment
+    -> WHERE course_id = 'IT102';
++-----------+-----------------+---------+-------------------+
+| course_id | course_title    | dept_id | department_name   |
++-----------+-----------------+---------+-------------------+
+| IT102     | Web Development | D01     | Computing Studies |
++-----------+-----------------+---------+-------------------+
+1 row in set (0.005 sec)
+
+mysql> notee
