@@ -17,10 +17,10 @@ WHERE species = 'Dog';
 
 
 -- Task 3: Filtering with Relational Operators
--- 3.1 Date filter on pet table
-SELECT name, species, birth_date 
+-- 3.1 Numeric filter on pet table
+SELECT name, species, age 
 FROM pet 
-WHERE birth_date >= '2021-01-01';
+WHERE age >= 2;
 
 -- 3.2 Date filter on appointment table
 SELECT appointment_id, pet_id, appointment_date 
@@ -30,12 +30,12 @@ WHERE appointment_date >= '2024-01-01';
 
 -- Task 4: Combine and Debug
 -- Original Working Query:
-SELECT name, species, birth_date 
+SELECT name, species, age 
 FROM pet 
 WHERE species = 'Cat';
 
 -- Deliberately Broken Query (missing quotes around 'Cat'):
--- SELECT name, species, birth_date 
+-- SELECT name, species, age 
 -- FROM pet 
 -- WHERE species = Cat;
 

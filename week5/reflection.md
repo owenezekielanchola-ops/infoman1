@@ -1,4 +1,4 @@
-\# Lab 5 Reflection
+# Lab 5 Reflection
 
 
 Running SELECT queries should be safe since they only read the data from the database. The statements such as UPDATE or DELETE fall under DML (Data Manipulation Language), meaning that they perform some changes to the database, for example, deleting or updating records. The commands DROP or ALTER belong to DDL (Data Definition Language) which may alter the structure of the database. Therefore, using SELECT will either show some results or will produce an error message in case of an incorrect query, making it a safe operation for testing purposes.
