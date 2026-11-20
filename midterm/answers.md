@@ -134,7 +134,84 @@ DESCRIBE session_speakers;
 ### Evidence: Table Verification (SHOW TABLES / DESCRIBE)
 <!-- Paste the verification output of your tables -->
 ```text
-[run in MySQL to fill SHOW TABLES and DESCRIBE outputs]
+SHOW TABLES;
++----------------------------+
+| Tables_in_eventhub_midterm |
++----------------------------+
+| bookings                   |
+| event_booking_flat         |
+| events                     |
+| organizers                 |
+| session_speakers           |
+| speakers                   |
+| venues                     |
++----------------------------+
+7 rows in set (0.156 sec)
+
+DESCRIBE venues;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| venue_code     | varchar(20)  | NO   | PRI | NULL    |       |
+| venue_name     | varchar(100) | NO   |     | NULL    |       |
+| venue_city     | varchar(50)  | NO   |     | NULL    |       |
+| venue_capacity | int          | NO   |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+4 rows in set (0.083 sec)
+
+DESCRIBE organizers;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| organizer_id    | int          | NO   | PRI | NULL    |       |
+| organizer_name  | varchar(100) | NO   |     | NULL    |       |
+| organizer_email | varchar(100) | NO   | UNI | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+3 rows in set (0.018 sec)
+
+DESCRIBE events;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| booking_id   | int          | NO   | PRI | NULL    |       |
+| booking_date | date         | NO   |     | NULL    |       |
+| event_title  | varchar(150) | NO   |     | NULL    |       |
+| organizer_id | int          | NO   | MUL | NULL    |       |
+| venue_code   | varchar(20)  | NO   | MUL | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+5 rows in set (0.021 sec)
+
+DESCRIBE bookings;
++-----------------+--------------+------+-----+-----------+-------+
+| Field           | Type         | Null | Key | Default   | Extra |
++-----------------+--------------+------+-----+-----------+-------+
+| booking_id      | int          | NO   | PRI | NULL      |       |
+| session_code    | varchar(20)  | NO   | PRI | NULL      |       |
+| ticket_category | varchar(50)  | NO   |     | NULL      |       |
+| ticket_price    | decimal(8,2) | NO   |     | NULL      |       |
+| tickets_booked  | int          | NO   |     | NULL      |       |
+| booking_status  | varchar(20)  | NO   |     | CONFIRMED |       |
++-----------------+--------------+------+-----+-----------+-------+
+6 rows in set (0.014 sec)
+
+DESCRIBE speakers;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| speaker_id   | int          | NO   | PRI | NULL    | auto_increment |
+| speaker_name | varchar(100) | NO   | UNI | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.015 sec)
+
+DESCRIBE session_speakers;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| booking_id   | int         | NO   | PRI | NULL    |       |
+| session_code | varchar(20) | NO   | PRI | NULL    |       |
+| speaker_id   | int         | NO   | PRI | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.019 sec)
 ```
 
 ### Reflection
@@ -251,7 +328,7 @@ VALUES ('V-CAMPUS', 'University Amphitheater', 'Quezon City', 500);
   ```
 - **MySQL Error Message Received:**
   ```text
-  [run in MySQL to fill actual ERROR 3819 message]
+  ERROR 3819 (HY000): Check constraint 'chk_ticket_price' is violated.
   ```
 
 ### Reflection
@@ -280,7 +357,14 @@ WHERE e.booking_date BETWEEN '2025-04-10' AND '2025-04-20'
 ```
 **Output:**
 ```text
-[run in MySQL to fill]
++------------+--------------+--------------+-----------------+--------------+----------------+
+| booking_id | session_code | booking_date | ticket_category | ticket_price | tickets_booked |
++------------+--------------+--------------+-----------------+--------------+----------------+
+|        101 | SESS-A1      | 2025-04-10   | Standard        |       550.00 |              4 |
+|        101 | SESS-A2      | 2025-04-10   | VIP             |      1320.00 |              2 |
+|        105 | SESS-D1      | 2025-04-20   | VIP             |      1650.00 |              1 |
++------------+--------------+--------------+-----------------+--------------+----------------+
+3 rows in set (0.014 sec)
 ```
 
 ### Query 2: Scalar String & Date Functions
@@ -292,7 +376,17 @@ INNER JOIN organizers o ON e.organizer_id = o.organizer_id;
 ```
 **Output:**
 ```text
-[run in MySQL to fill]
++------------+-------------------------------------------------+--------------+
+| booking_id | contact_card                                    | days_elapsed |
++------------+-------------------------------------------------+--------------+
+|        101 | Tech Forward PH <info@techforward.ph>           |           21 |
+|        102 | Green Earth Initiative <contact@greenearth.org> |           19 |
+|        104 | Green Earth Initiative <contact@greenearth.org> |           13 |
+|        103 | Innovate Campus Lab <lead@innovatecampus.edu>   |           16 |
+|        105 | Digital Health Alliance <care@digitalhealth.ph> |           11 |
+|        106 | Digital Health Alliance <care@digitalhealth.ph> |            9 |
++------------+-------------------------------------------------+--------------+
+6 rows in set (0.011 sec)
 ```
 
 ### Query 3: Pattern Matching with LIKE Wildcards
@@ -304,7 +398,14 @@ WHERE venue_city LIKE '%City' OR venue_city LIKE 'M%';
 ```
 **Output:**
 ```text
-[run in MySQL to fill]
++------------+-------------------------+-------------+----------------+
+| venue_code | venue_name              | venue_city  | venue_capacity |
++------------+-------------------------+-------------+----------------+
+| V-BAY      | Bayview Convention Hall | Manila      |            150 |
+| V-CAMPUS   | University Amphitheater | Quezon City |            500 |
+| V-METRO    | Metro Tech Auditorium   | Quezon City |            300 |
++------------+-------------------------+-------------+----------------+
+3 rows in set (0.007 sec)
 ```
 
 ### Query 4: GROUP BY and HAVING Summary
@@ -317,7 +418,13 @@ HAVING SUM(tickets_booked) >= 5;
 ```
 **Output:**
 ```text
-[run in MySQL to fill]
++-----------------+---------------+---------------+
+| ticket_category | total_tickets | gross_revenue |
++-----------------+---------------+---------------+
+| Standard        |            18 |       8960.00 |
+| Student         |            10 |       2500.00 |
++-----------------+---------------+---------------+
+2 rows in set (0.010 sec)
 ```
 
 ### Reflection
@@ -346,7 +453,18 @@ INNER JOIN organizers o ON e.organizer_id = o.organizer_id;
 ```
 **Output:**
 ```text
-[run in MySQL to fill]
++-----------------------------+-------------------------+------------------------------+-----------------+----------------+-------------+
+| event_title                 | organizer_name          | venue_name                   | ticket_category | tickets_booked | total_price |
++-----------------------------+-------------------------+------------------------------+-----------------+----------------+-------------+
+| Modern Web & DB Summit      | Tech Forward PH         | Metro Tech Auditorium        | Standard        |              4 |     2200.00 |
+| Modern Web & DB Summit      | Tech Forward PH         | Metro Tech Auditorium        | VIP             |              2 |     2640.00 |
+| Urban Ecology Seminar       | Green Earth Initiative  | Bayview Convention Hall      | Standard        |              5 |     1750.00 |
+| Community Climate Action    | Green Earth Initiative  | Bayview Convention Hall      | Standard        |              3 |     1050.00 |
+| AI & Cloud Infrastructure   | Innovate Campus Lab     | Metro Tech Auditorium        | Student         |             10 |     2500.00 |
+| Health Informatics 2025     | Digital Health Alliance | Greenfield Innovation Center | VIP             |              1 |     1650.00 |
+| Telemedicine Implementation | Digital Health Alliance | Greenfield Innovation Center | Standard        |              6 |     3960.00 |
++-----------------------------+-------------------------+------------------------------+-----------------+----------------+-------------+
+7 rows in set (0.006 sec)
 ```
 
 ### 2. Finding Unbooked Venues (LEFT JOIN ... IS NULL)
@@ -359,7 +477,12 @@ WHERE e.booking_id IS NULL;
 ```
 **Output:**
 ```text
-[run in MySQL to fill]
++------------+-------------------------+-------------+
+| venue_code | venue_name              | venue_city  |
++------------+-------------------------+-------------+
+| V-CAMPUS   | University Amphitheater | Quezon City |
++------------+-------------------------+-------------+
+1 row in set (0.006 sec)
 ```
 
 ### 3. The "Silent Inner Join" Trap Comparison
@@ -424,7 +547,7 @@ WHERE venue_code = 'V-PARK';
   ```
 - **MySQL Error Message Received:**
   ```text
-  [run in MySQL to fill actual ERROR 3819 message]
+  ERROR 3819 (HY000): Check constraint 'chk_venue_status' is violated.
   ```
 
 ### 4. Integrated Synthesis Report Query
@@ -441,7 +564,13 @@ ORDER BY total_revenue DESC;
 ```
 **Output:**
 ```text
-[run in MySQL to fill]
++-------------------------+-------------+----------------+-----------------+------------------+---------------+
+| venue_name              | venue_city  | total_bookings | total_attendees | avg_ticket_price | total_revenue |
++-------------------------+-------------+----------------+-----------------+------------------+---------------+
+| Metro Tech Auditorium   | Quezon City |              3 |              16 |       706.666667 |       7340.00 |
+| Bayview Convention Hall | Manila      |              2 |               8 |       350.000000 |       2800.00 |
++-------------------------+-------------+----------------+-----------------+------------------+---------------+
+2 rows in set (0.015 sec)
 ```
 
 ### Reflection
