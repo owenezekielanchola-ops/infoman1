@@ -10,9 +10,11 @@
 ## Task 1: Normalization Audit & 3NF Decomposition
 
 ### Approach
+<!-- Describe how you inspected the flat table and decided on the decomposition order -->
 Checked the 7 rows in event_booking_flat, found repeating venues/organizers and comma-listed speakers, then broke it down from 1NF to 3NF.
 
 ### 1. Data Anomalies in `event_booking_flat`
+<!-- Identify and explain at least one real example of each anomaly in the provided flat table -->
 
 - **Update Anomaly:**
   Repeated data: V-METRO appears in 3 rows. Updating the capacity or city will require editing 3 rows.
@@ -22,6 +24,7 @@ Checked the 7 rows in event_booking_flat, found repeating venues/organizers and 
   If we delete 103 SESS-A1 we lose the only information about Organizer 3 (Innovate Campus Lab) and AI & Cloud Infrastructure.
 
 ### 2. Functional Dependencies
+<!-- List all functional dependencies identified in the flat dataset -->
 - `(booking_id, session_code) -> ticket_category, ticket_price, tickets_booked`
 - `booking_id -> booking_date, event_title, organizer_id, venue_code`
 - `organizer_id -> organizer_name, organizer_email`
@@ -29,6 +32,7 @@ Checked the 7 rows in event_booking_flat, found repeating venues/organizers and 
 - `(booking_id, session_code) ->> speaker_name`
 
 ### 3. Normalization Progression
+<!-- Detail each step from unnormalized flat table to 1NF, 2NF, and 3NF -->
 
 - **First Normal Form (1NF)** (include how speakers become atomic rows):
   speaker_list removed to ensure that all data in each cell is atomic. Speakers table created and junction table session_speakers.
@@ -38,6 +42,7 @@ Checked the 7 rows in event_booking_flat, found repeating venues/organizers and 
   Organizers and venues tables split from events. Reference keys (organizer_id, venue_code) added.
 
 ### 4. Final Relational Schema Notation
+<!-- Provide the complete relational schema in standard notation: TableName(<u>pk</u>, attr1, attr2, fk_col [FK]) -->
 venues(<u>venue_code</u>, venue_name, venue_city, venue_capacity)  
 organizers(<u>organizer_id</u>, organizer_name, organizer_email)  
 events(<u>booking_id</u>, booking_date, event_title, organizer_id [FK], venue_code [FK])  
@@ -46,6 +51,7 @@ speakers(<u>speaker_id</u>, speaker_name)
 session_speakers(<u>booking_id [FK]</u>, <u>session_code [FK]</u>, <u>speaker_id [FK]</u>)
 
 ### Evidence
+<!-- Reference the rows of the seed data that demonstrate each anomaly -->
 V-METRO appears in 3 rows (101 SESS-A1, 101 SESS-A2, 103 SESS-A1). Row 103 SESS-A1 is the only row with Innovate Campus Lab. Cannot add new venue as both values in primary key are not NULL.
 
 ### Reflection
@@ -58,9 +64,11 @@ Many speakers per session. Many sessions per speaker. Comma separated violates 1
 ## Task 2: DDL Implementation with Constraints
 
 ### Approach
+<!-- Explain your data type choices and constraint definitions (PRIMARY KEY, FOREIGN KEY, NOT NULL, UNIQUE, DEFAULT, CHECK) -->
 Tables created with relevant datatypes (INT/VARCHAR/DATE/DECIMAL(8,2)). Primary and foreign keys, NOT NULL constraints. Unique Constraints applied to organizer_email and speaker_name. Default value: CONFIRMED. Data integrity constraints (venue_capacity >0, ticket_price >=0.00).
 
 ### Code / Query Used
+<!-- Paste or summarize your DDL (full script is in task2_schema_ddl.sql) -->
 ```sql
 USE eventhub_midterm;
 
@@ -124,6 +132,7 @@ DESCRIBE session_speakers;
 ```
 
 ### Evidence: Table Verification (SHOW TABLES / DESCRIBE)
+<!-- Paste the verification output of your tables -->
 ```text
 [run in MySQL to fill SHOW TABLES and DESCRIBE outputs]
 ```
@@ -141,13 +150,53 @@ Booking_id and session_code required in bookings table as the session code appea
 
 ### Approach
 <!-- Explain how you moved data from event_booking_flat into your 3NF tables without data loss, including how speaker names were split -->
-
-
+Parent tables (venues, organizers, events, bookings, speakers, session_speakers) inserted using SELECT DISTINCT so foreign keys match. List of speakers split into 7 rows, creating 11 rows in junction table.
 
 ### Code / Query Used
 <!-- Paste or summarize your migration INSERT statements and the V-CAMPUS insert (full script is in task3_dml_operations.sql) -->
-
 ```sql
+USE eventhub_midterm;
+
+INSERT INTO venues (venue_code, venue_name, venue_city, venue_capacity)
+SELECT DISTINCT venue_code, venue_name, venue_city, venue_capacity
+FROM event_booking_flat;
+
+INSERT INTO organizers (organizer_id, organizer_name, organizer_email)
+SELECT DISTINCT organizer_id, organizer_name, organizer_email
+FROM event_booking_flat;
+
+INSERT INTO events (booking_id, booking_date, event_title, organizer_id, venue_code)
+SELECT DISTINCT booking_id, booking_date, event_title, organizer_id, venue_code
+FROM event_booking_flat;
+
+INSERT INTO bookings (booking_id, session_code, ticket_category, ticket_price, tickets_booked)
+SELECT booking_id, session_code, ticket_category, ticket_price, tickets_booked
+FROM event_booking_flat;
+
+INSERT INTO speakers (speaker_id, speaker_name) VALUES
+(1, 'Dr. Perez'),
+(2, 'Engr. Cruz'),
+(3, 'Prof. Santos'),
+(4, 'Ms. Lim'),
+(5, 'Dr. Reyes'),
+(6, 'Dr. Aquino'),
+(7, 'Engr. Tan');
+
+INSERT INTO session_speakers (booking_id, session_code, speaker_id) VALUES
+(101, 'SESS-A1', 1),
+(101, 'SESS-A1', 2),
+(101, 'SESS-A2', 2),
+(102, 'SESS-B1', 3),
+(103, 'SESS-A1', 1),
+(103, 'SESS-A1', 4),
+(104, 'SESS-C1', 3),
+(104, 'SESS-C1', 5),
+(105, 'SESS-D1', 6),
+(106, 'SESS-D2', 6),
+(106, 'SESS-D2', 7);
+
+INSERT INTO venues (venue_code, venue_name, venue_city, venue_capacity)
+VALUES ('V-CAMPUS', 'University Amphitheater', 'Quezon City', 500);
 ```
 
 ### Safe Change Loop: 10% Ticket Price Increase
@@ -155,27 +204,41 @@ Booking_id and session_code required in bookings table as the session code appea
 
 - **Step 1 (Preview Rows):**
   ```sql
+  SELECT booking_id, session_code, ticket_category, ticket_price
+  FROM bookings
+  WHERE ticket_price > 400.00;
   ```
 - **Step 2 (Confirm Target Count):**
-  
+  4 rows updated: 101 SESS-A1, 101 SESS-A2, 105 SESS-D1, 106 SESS-D2.
 - **Step 3 (Execute UPDATE):**
   ```sql
+  UPDATE bookings
+  SET ticket_price = ROUND(ticket_price * 1.10, 2)
+  WHERE ticket_price > 400.00;
   ```
 - **Step 4 (Verify Changes):**
   ```sql
+  SELECT booking_id, session_code, ticket_category, ticket_price
+  FROM bookings;
   ```
 
 ### Safe Change Loop: DELETE of `V-TEMP`
 - **Step 1 (Preview Rows):**
   ```sql
+  INSERT INTO venues (venue_code, venue_name, venue_city, venue_capacity)
+  VALUES ('V-TEMP', 'Temporary Annex', 'Makati', 50);
+
+  SELECT * FROM venues WHERE venue_code = 'V-TEMP';
   ```
 - **Step 2 (Confirm Target Count):**
-  
+  1 row (V-TEMP) deleted.
 - **Step 3 (Execute DELETE):**
   ```sql
+  DELETE FROM venues WHERE venue_code = 'V-TEMP';
   ```
 - **Step 4 (Verify Changes):**
   ```sql
+  SELECT * FROM venues WHERE venue_code = 'V-TEMP';
   ```
 
 ### Evidence: Constraint Protection Verification
@@ -183,13 +246,18 @@ Booking_id and session_code required in bookings table as the session code appea
 
 - **Invalid SQL Statement:**
   ```sql
+  INSERT INTO bookings (booking_id, session_code, ticket_category, ticket_price, tickets_booked)
+  VALUES (101, 'SESS-ERR', 'Promo', -100.00, 1);
   ```
 - **MySQL Error Message Received:**
-  ```
+  ```text
+  [run in MySQL to fill actual ERROR 3819 message]
   ```
 
 ### Reflection
 Why is the `DELETE` targeted by primary key rather than by venue name?
+
+Venue_code is unique. By searching by venue_code we delete only that specific row. Searching by venue_name may delete multiple rows, or none if there is a typo.
 
 
 
