@@ -267,43 +267,63 @@ Venue_code is unique. By searching by venue_code we delete only that specific ro
 
 ### Approach
 <!-- Explain how you chose filters, wildcards, and grouping columns -->
-
-
+Bookings joined with events using OR in brackets (Q1). Events joined with organizers to allow concatenation and DATE difference (Q2). Venue filtering using LIKE (Q3). Booking grouping with HAVING clause (Q4).
 
 ### Query 1: Compound Logical Filtering with Precedence
 **SQL Query:**
 ```sql
+SELECT b.booking_id, b.session_code, e.booking_date, b.ticket_category, b.ticket_price, b.tickets_booked
+FROM bookings b
+INNER JOIN events e ON b.booking_id = e.booking_id
+WHERE e.booking_date BETWEEN '2025-04-10' AND '2025-04-20'
+  AND (b.ticket_category = 'VIP' OR b.ticket_price > 500.00);
 ```
 **Output:**
-```
+```text
+[run in MySQL to fill]
 ```
 
 ### Query 2: Scalar String & Date Functions
 **SQL Query:**
 ```sql
+SELECT e.booking_id, CONCAT(o.organizer_name, ' <', o.organizer_email, '>') AS contact_card, DATEDIFF('2025-05-01', e.booking_date) AS days_elapsed
+FROM events e
+INNER JOIN organizers o ON e.organizer_id = o.organizer_id;
 ```
 **Output:**
-```
+```text
+[run in MySQL to fill]
 ```
 
 ### Query 3: Pattern Matching with LIKE Wildcards
 **SQL Query:**
 ```sql
+SELECT venue_code, venue_name, venue_city, venue_capacity
+FROM venues
+WHERE venue_city LIKE '%City' OR venue_city LIKE 'M%';
 ```
 **Output:**
-```
+```text
+[run in MySQL to fill]
 ```
 
 ### Query 4: GROUP BY and HAVING Summary
 **SQL Query:**
 ```sql
+SELECT ticket_category, SUM(tickets_booked) AS total_tickets, SUM(tickets_booked * ticket_price) AS gross_revenue
+FROM bookings
+GROUP BY ticket_category
+HAVING SUM(tickets_booked) >= 5;
 ```
 **Output:**
-```
+```text
+[run in MySQL to fill]
 ```
 
 ### Reflection
 Why does Query 4 filter with `HAVING` instead of `WHERE`?
+
+WHERE clause comes before grouping and so before the SUM of tickets booked. HAVING clause comes after grouping and so removes any VIP bookings with 3 tickets.
 
 
 
