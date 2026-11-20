@@ -333,42 +333,63 @@ WHERE clause comes before grouping and so before the SUM of tickets booked. HAVI
 
 ### Approach
 <!-- Explain which tables you joined, in what order, and which keys you joined on -->
-
-
+Bookings, events, venues and organisers joined using primary and foreign keys. Idle venues found using LEFT JOIN with IS NULL. Compared where VIP filter is in WHERE clause, or ON clause.
 
 ### 1. Multi-Table INNER JOIN
 **SQL Query:**
 ```sql
+SELECT e.event_title, o.organizer_name, v.venue_name, b.ticket_category, b.tickets_booked, b.tickets_booked * b.ticket_price AS total_price
+FROM bookings b
+INNER JOIN events e ON b.booking_id = e.booking_id
+INNER JOIN venues v ON e.venue_code = v.venue_code
+INNER JOIN organizers o ON e.organizer_id = o.organizer_id;
 ```
 **Output:**
-```
+```text
+[run in MySQL to fill]
 ```
 
 ### 2. Finding Unbooked Venues (LEFT JOIN ... IS NULL)
 **SQL Query:**
 ```sql
+SELECT v.venue_code, v.venue_name, v.venue_city
+FROM venues v
+LEFT JOIN events e ON v.venue_code = e.venue_code
+WHERE e.booking_id IS NULL;
 ```
 **Output:**
-```
+```text
+[run in MySQL to fill]
 ```
 
 ### 3. The "Silent Inner Join" Trap Comparison
 - **Version A (Flawed WHERE filter):**
   ```sql
+  SELECT v.venue_code, v.venue_name, b.booking_id, b.session_code, b.ticket_category, b.tickets_booked
+  FROM venues v
+  LEFT JOIN events e ON v.venue_code = e.venue_code
+  LEFT JOIN bookings b ON e.booking_id = b.booking_id
+  WHERE b.ticket_category = 'VIP';
   ```
   *Result / Behavior:*
-  
+  Version A: 2 rows - V-METRO and V-PARK. V-BAY and V-CAMPUS are omitted.
 - **Version B (Correct ON condition):**
   ```sql
+  SELECT v.venue_code, v.venue_name, b.booking_id, b.session_code, b.ticket_category, b.tickets_booked
+  FROM venues v
+  LEFT JOIN events e ON v.venue_code = e.venue_code
+  LEFT JOIN bookings b ON e.booking_id = b.booking_id AND b.ticket_category = 'VIP';
   ```
   *Result / Behavior:*
-  
+  Version B: 7 rows - All 4 venues included. Where there are no VIP tickets for a venue, NULL is displayed.
 - **Technical Explanation:**
   <!-- Why does moving the filter from ON to WHERE strip preserved NULL rows in an outer join? -->
-  
+  As WHERE occurs after LEFT JOIN, rows with NULL values will not satisfy ‘VIP’ and so will be omitted (like an INNER JOIN). Adding AND b.ticket_category = ‘VIP’ in the ON clause means that during joining, only VIP bookings are matched. This means all venues remain.
 
 ### Reflection
 Why is `= NULL` the wrong way to find unbooked venues, and what is the correct test?
+
+Using = NULL will return 0 results. It must be IS NULL.
 
 
 
