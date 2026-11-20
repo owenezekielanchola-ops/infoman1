@@ -456,23 +456,25 @@ Default value of ACTIVE means that for the 4 existing rows, ACTIVE is automatica
 ## Task 7: Self-Review & Reflection
 
 ### Self-Audit Checklist
-- [ ] All three anomalies (update, insert, delete) clearly explained with examples
-- [ ] Schema systematically normalized from flat table $\rightarrow$ 1NF $\rightarrow$ 2NF $\rightarrow$ 3NF
-- [ ] Speakers modeled with a junction table
-- [ ] All primary keys underlined and foreign keys marked in schema notation
-- [ ] DDL created with `NOT NULL`, `UNIQUE`, `DEFAULT`, and `CHECK` constraints
-- [ ] 4-step Safe Change Loop followed for the `UPDATE` and the `DELETE`
-- [ ] Invalid insert correctly triggered and documented MySQL constraint error
-- [ ] Query 1 properly uses parentheses for `AND` / `OR` operator precedence
-- [ ] Query 4 properly uses `HAVING` instead of `WHERE` for aggregate filter
-- [ ] Outer join missing-record query uses `IS NULL` check
-- [ ] Silent inner join trap clearly explained with both query variations
-- [ ] `ALTER TABLE` successfully executed and invalid status rejected
-- [ ] Integrated synthesis report combines joins, aggregation, grouping, and ordering
+- [x] All three anomalies (update, insert, delete) clearly explained with examples
+- [x] Schema systematically normalized from flat table $\rightarrow$ 1NF $\rightarrow$ 2NF $\rightarrow$ 3NF
+- [x] Speakers modeled with a junction table
+- [x] All primary keys underlined and foreign keys marked in schema notation
+- [x] DDL created with `NOT NULL`, `UNIQUE`, `DEFAULT`, and `CHECK` constraints
+- [x] 4-step Safe Change Loop followed for the `UPDATE` and the `DELETE`
+- [x] Invalid insert correctly triggered and documented MySQL constraint error
+- [x] Query 1 properly uses parentheses for `AND` / `OR` operator precedence
+- [x] Query 4 properly uses `HAVING` instead of `WHERE` for aggregate filter
+- [x] Outer join missing-record query uses `IS NULL` check
+- [x] Silent inner join trap clearly explained with both query variations
+- [x] `ALTER TABLE` successfully executed and invalid status rejected
+- [x] Integrated synthesis report combines joins, aggregation, grouping, and ordering
 
 ### Concluding Reflection
 1. What was the most significant challenge when decomposing the unnormalized flat table into 3NF, and how did separating entities improve data integrity?
    
-   
+   It was hardest to notice that SESS-A1 was repeated in bookings 101 and 103 and to separate speaker_list into session_speakers. Splitting into 6 tables ensured data integrity. In task 6, only 1 row is updated for V-PARK. In task 3, V-CAMPUS can be added as there are no bookings for it. Unique and CHECK constraints prevent poor data.
 
 2. What are the practical performance tradeoffs between keeping a single flat table versus querying multiple normalized tables using `JOIN`s in a high-traffic production environment?
+   
+   The flat table design allows quick reading of data, however updating data is messy due to duplicated data. The 3NF format allows for clean and quick updates. However, complex reports take slightly longer due to multiple tables needing to be joined (Tasks 5 and 6).
