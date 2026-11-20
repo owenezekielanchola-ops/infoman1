@@ -399,35 +399,55 @@ Using = NULL will return 0 results. It must be IS NULL.
 
 ### Approach
 <!-- Explain how you added venue_status and why you chose the CHECK values -->
-
-
+Added new column to venues table using ALTER TABLE. Column: venue_status VARCHAR(20), NOT NULL with default of ACTIVE. Check constraint to make sure it can only be ACTIVE/RENOVATION/INACTIVE. Updated V-PARK, tried CLOSED and produced final report.
 
 ### 1. ALTER TABLE Statement & Status Constraint
 ```sql
+ALTER TABLE venues
+ADD COLUMN venue_status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+ADD CONSTRAINT chk_venue_status CHECK (venue_status IN ('ACTIVE', 'RENOVATION', 'INACTIVE'));
 ```
 
 ### 2. Targeted Primary-Key UPDATE
 ```sql
+UPDATE venues
+SET venue_status = 'RENOVATION'
+WHERE venue_code = 'V-PARK';
 ```
 
 ### 3. Constraint Test (invalid status)
 - **Invalid SQL Statement:**
   ```sql
+  UPDATE venues
+  SET venue_status = 'CLOSED'
+  WHERE venue_code = 'V-BAY';
   ```
 - **MySQL Error Message Received:**
-  ```
+  ```text
+  [run in MySQL to fill actual ERROR 3819 message]
   ```
 
 ### 4. Integrated Synthesis Report Query
 **SQL Query:**
 ```sql
+SELECT v.venue_name, v.venue_city, COUNT(*) AS total_bookings, SUM(b.tickets_booked) AS total_attendees, AVG(b.ticket_price) AS avg_ticket_price, SUM(b.tickets_booked * b.ticket_price) AS total_revenue
+FROM venues v
+INNER JOIN events e ON v.venue_code = e.venue_code
+INNER JOIN bookings b ON e.booking_id = b.booking_id
+WHERE v.venue_status = 'ACTIVE'
+GROUP BY v.venue_name, v.venue_city
+HAVING AVG(b.ticket_price) > 300.00
+ORDER BY total_revenue DESC;
 ```
 **Output:**
-```
+```text
+[run in MySQL to fill]
 ```
 
 ### Reflection
 Why does adding `NOT NULL DEFAULT 'ACTIVE'` succeed on a table that already holds rows?
+
+Default value of ACTIVE means that for the 4 existing rows, ACTIVE is automatically filled in. Therefore, no rows will be NULL and NOT NULL constraint is satisfied.
 
 
 
